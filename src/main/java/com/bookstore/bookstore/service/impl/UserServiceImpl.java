@@ -30,14 +30,15 @@ public class UserServiceImpl implements UserService{
 	private PasswordResetTokenRepository passwordResetTokenRepository;
 
 	@Override
-	public PasswordResetToken getPasswordResetToken(String token) {
+	public PasswordResetToken getPasswordResetToken(final String token) {
 		return passwordResetTokenRepository.findByToken(token);	
 	}
 
 	@Override
-	public void createPasswordResetTokenForUser(User user, String token) {
-		// TODO Auto-generated method stub
+	public void createPasswordResetTokenForUser(final User user, final String token) {
+		final PasswordResetToken myToken = new PasswordResetToken(token, user);
 		
+		passwordResetTokenRepository.save(myToken);
 	}
 
 	@Override
@@ -48,8 +49,22 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User createUser(User user, Set<UserRole> userRoles) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		User localUser = userRepository.findByUsername(user.getUsername());
+
+		if (null != localUser) {
+			LOG.info("User {} already exists.", user.getUsername());
+		}
+		else {
+			for(UserRole ur : userRoles) {
+				roleRepository.save(ur.getRole());
+			}
+
+			user.getUserRoles().addAll(userRoles);
+
+			localUser = userRepository.save(user);
+		}
+
+		return localUser;
 	}
 
 	@Override

@@ -1,123 +1,163 @@
 package com.bookstore.bookstore.domain;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// to let spring knows this class is protected with security, implement UserDetails interface.
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.bookstore.bookstore.domain.security.Authority;
+import com.bookstore.bookstore.domain.security.UserRole;
+
 @Entity
-public class User implements UserDetails {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+public class User implements UserDetails{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id",nullable = false,updatable = false)
+	private Long id;
+	private String username;
+	private String password;
+	private String firstname;
+	private String lastname;
+	
+	@Column(name = "email",nullable = false,updatable = false)
+	private String email;
+	
+	private String phone;
+	
+	private boolean enabled = true;
+	
+	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JsonIgnore
+	private Set<UserRole> userRoles=new HashSet<>();
 
-    private String username;
+	
+	
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
 
-    private String password;
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
 
-    private String firstname;
+	public Long getId() {
+		return id;
+	}
 
-    private String lastname;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Column(name = "email", nullable = false, updatable = false)
-    private String email;
+	
 
-    private String phone;
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    private boolean enabled = true;
+	public String getPassword() {
+		return password;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getFirstname() {
+		return firstname;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getLastname() {
+		return lastname;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
 
-    public String getFirstname() {
-        return firstname;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getLastname() {
-        return lastname;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Set<GrantedAuthority> authorities=new HashSet<>();
+		
+		userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
+		return authorities;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return username;
+	}
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", firstname=" + firstname
+				+ ", lastname=" + lastname + ", email=" + email + ", phone=" + phone + ", enabled=" + enabled
+				+ ", userRoles=" + userRoles + "]";
+	}	
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-    
+	
 }
