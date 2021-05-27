@@ -7,14 +7,14 @@
 <title>Le's Bookstore</title>
 
 <!-- Bootstrap core CSS -->
-<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
 
-<link href="/css/non-responsive.css" rel="stylesheet" />
+<link th:href="@{/css/non-responsive.css}" rel="stylesheet" />
 
 <!-- Custom styles for this template -->
-<link href="/css/style.css" rel="stylesheet" />
+<link th:href="@{/css/style.css}" rel="stylesheet" />
 
-<link rel="icon" href="/image/applie-touch-icon.png" />
+<link rel="icon" th:href="@{/image/applie-touch-icon.png}" />
 </head>
 
 <body>
@@ -49,7 +49,7 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#">SHOPPING CART</a></li>
 						<li><a sec:authorize="isAnonymous()" th:href="@{/login}">MY ACCOUNT</a></li>
-						<li><a sec:authorize="isAuthenticated()" th:href="@{/myProfile}">MY ACCOUNT</a></li>
+						<li><a sec:authorize="isAuthenticated()" th:href="@{/myProfile}">MY ACCOUNT-BB</a></li>
 						<li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">LOGOUT</a></li>
 					</ul>
 				</div>
