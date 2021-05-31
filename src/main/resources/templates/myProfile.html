@@ -51,8 +51,11 @@
                                 <form th:action="@{/updateUserInfo}" method="post">
                                     <input type="hidden" name="id" th:value="${user.id}" />
 
-                                    <div class="bg-info" th:if="${updateUserInfo}">User info
+                                    <div class="bg-info" th:if="${updateSuccess}">User info
                                         updated.
+                                    </div>
+
+                                    <div class="bg-info" th:if="${incorrectPassword}">Incorrect password.
                                     </div>
 
                                     <div class="form-group">
@@ -60,14 +63,14 @@
                                             <div class="col-xs-6">
                                                 <label for="firstName">First Name</label> <input
                                                     type="text" class="form-control" id="firstName"
-                                                    name="firstName" th:value="${user.firstName}"/>
+                                                    name="firstName" th:value="${user.firstname}"/>
                                             </div>
                                             <div class="col-xs-6">
                                                 <label for="lastName">Last Name</label> <input type="text"
                                                                                                class="form-control"
                                                                                                id="lastName"
                                                                                                name="lastName"
-                                                                                               th:value="${user.lastName}"/>
+                                                                                               th:value="${user.lastname}"/>
                                             </div>
                                         </div>
                                     </div>
